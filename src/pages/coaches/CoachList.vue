@@ -1,29 +1,41 @@
 <template>
   <div>
+    <base-dialog :show="!!error" title="Some error occurs"  @close="handleError">
+    <template v-slot:header>
+      what happen
+    </template>
+    {{ error }}
+  </base-dialog>
     <coach-filter :filter="filter" @change-filter="setFilters"></coach-filter>
 
     <base-card>
       <div class="controls">
         <base-button mode="outline" @click="refresh">Refresh</base-button>
-        <base-button v-if="!isCoach" link to="/registers">Register as a Coach</base-button>
+        <base-button v-if="!isCoach && !isFetching" link to="/registers"
+          >Register as a Coach</base-button
+        >
       </div>
-      <section>
-        <div v-if="hasCoaches">
-          <TransitionGroup name="list" tag="ul">
 
-          <coach-item
-            v-for="coach in filterdCoaches"
-            :key="coach.id"
-            :first-name="coach.firstName"
-            :last-name="coach.lastName"
-            :rate="coach.hourlyRate"
-            :areas="coach.areas"
-            :id="coach.id"
-          ></coach-item>
+      <section>
+        <div v-if="isFetching">
+        <base-spinner></base-spinner>
+      </div>
+        <div v-else-if="hasCoaches">
+          <TransitionGroup name="list" tag="ul">
+            <coach-item
+              v-for="coach in filterdCoaches"
+              :key="coach.id"
+              :first-name="coach.firstName"
+              :last-name="coach.lastName"
+              :rate="coach.hourlyRate"
+              :areas="coach.areas"
+              :id="coach.id"
+            ></coach-item>
           </TransitionGroup>
-          </div>
+        </div>
         <h3 v-else>No coaches</h3>
       </section>
+    
     </base-card>
   </div>
 </template>
@@ -42,16 +54,35 @@ export default {
         backend: true,
         career: true,
       },
+      isFetching: false,
+      error:null,
     };
   },
+  created() {
+    this.loadCoaches();
+  },
+
   methods: {
+    handleError(){
+      this.error = null;
+    },
     setFilters(newFilter) {
       this.filter = newFilter;
       console.log(this.filter);
     },
-    refresh()
-    {
-       this.filter =  {
+    async loadCoaches() {
+      this.isFetching = true;
+      try{
+        await this.$store.dispatch("coaches/loadCoaches");
+      }
+      catch(error){
+        this.error = error.message || "Something is wrong!";
+      }
+     
+      this.isFetching = false;
+    },
+    refresh() {
+      this.filter = {
         frontend: true,
         backend: true,
         career: true,
@@ -59,9 +90,8 @@ export default {
     },
   },
   computed: {
-    isCoach()
-    {
-        return this.$store.getters['coaches/isCoach'];
+    isCoach() {
+      return this.$store.getters["coaches/isCoach"];
     },
     filterdCoaches() {
       const listCoaches = this.$store.getters["coaches/coaches"];
@@ -79,7 +109,7 @@ export default {
       });
     },
     hasCoaches() {
-      return this.$store.getters["coaches/hasCoaches"];
+      return !this.isFetching && this.$store.getters["coaches/hasCoaches"];
     },
   },
 };

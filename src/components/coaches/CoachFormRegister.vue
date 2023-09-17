@@ -34,7 +34,7 @@
         </div>
       </div>
 
-      <div class="form-control" :class="{ invalid: !description.isValid }">
+      <div class="form-control" :class="{ invalid: messageErrors.hasOwnProperty('description') }">
         <label for="description"> Description</label>
         <textarea
           id="description"
@@ -45,7 +45,7 @@
         ></textarea>
         <p v-if="!description.isValid">This field mustn't be empty!</p>
       </div>
-      <div class="form-control" :class="{ invalid: !areas.isValid }">
+      <div class="form-control" :class="{ invalid: messageErrors.hasOwnProperty('areas') }">
         <h3>Arears of Expertises</h3>
         <div class="flex-row">
           <div>
@@ -81,7 +81,7 @@
         </div>
         <p v-if="!areas.isValid">This field mustn't be empty!</p>
       </div>
-      <div class="form-control" :class="{ invalid: !rate.isValid }">
+      <div class="form-control" :class="{ invalid: messageErrors.hasOwnProperty('rate') }">
         <label for="rate"> Rate</label>
         <input
           type="number"
@@ -135,7 +135,7 @@ export default {
       if (rule == "required") {
         if (this[field].val.length == 0) {
           let message = "The " + field + "must not be empty!";
-         if(!this.messageErrors.hasOwnProperty(field))
+         if(!(field in this.messageErrors))
          {
           this.messageErrors[field] = new Array();
          }
@@ -147,7 +147,7 @@ export default {
         let min = rule.split(":")[1];
         if (this[field].val.length < min) {
           let message = "The " + field + "must at least " + min + " characters";
-          if(!this.messageErrors.hasOwnProperty(field))
+          if(!(field in this.messageErrors))
          {
           this.messageErrors[field] = new Array();
          }
@@ -159,7 +159,7 @@ export default {
         let max = rule.split(":")[1];
         if (this[field].val.length > max) {
           let message = "The " + field + "must maximum " + max + " characters";
-          if(!this.messageErrors.hasOwnProperty(field))
+          if(!(field in this.messageErrors))
          {
           this.messageErrors[field] = new Array();
          }
@@ -180,8 +180,8 @@ export default {
           this.generateMessage(field, rule);
         }
       }
-      this.isValidData = Object.keys(this.messageErrors) ? false : true;
-      console.log(this.isValidData);
+    
+      this.isValidData = Object.keys(this.messageErrors).length > 0  ? false : true;
     },
     register() {
       this.isValidData = true;
@@ -204,7 +204,7 @@ export default {
   },
 };
 </script>
-<style>
+<style scoped>
 .form {
   width: 100%;
 }
