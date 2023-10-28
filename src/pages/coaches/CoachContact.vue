@@ -35,11 +35,16 @@ export default{
                 this.isValidForm = false;
                 return; 
             }
-            this.$store.dispatch('requests/contactCoach',{
+            try {
+              this.$store.dispatch('requests/contactCoach',{
               email: this.email,
               message: this.message,
               coachId: this.$route.params.id
             } );
+            } catch (error) {
+              console.log(error);
+            }
+        
             this.$router.replace('/requests');
 
 

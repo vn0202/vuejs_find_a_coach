@@ -15,10 +15,13 @@ export default {
   components: {
     RequestItem,
   },
+  created()
+  {
+this.loadRequests();
+  },
   computed: {
     receiveRequests()
     {
-        console.log('nghia');
         return this.$store.getters['requests/requests'];
     },
     hasRequest()
@@ -26,5 +29,10 @@ export default {
         return this.$store.getters['requests/hasRequests'];
     }
   },
+  methods:{
+    loadRequests(){
+      this.$store.dispatch('requests/fetchRequests');
+    }
+  }
 };
 </script>

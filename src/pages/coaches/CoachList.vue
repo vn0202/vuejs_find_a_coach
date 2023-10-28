@@ -70,10 +70,10 @@ export default {
       this.filter = newFilter;
       console.log(this.filter);
     },
-    async loadCoaches() {
+    async loadCoaches(refresh=false) {
       this.isFetching = true;
       try{
-        await this.$store.dispatch("coaches/loadCoaches");
+        await this.$store.dispatch("coaches/loadCoaches", {forceFetch: refresh});
       }
       catch(error){
         this.error = error.message || "Something is wrong!";
