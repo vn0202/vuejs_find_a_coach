@@ -1,6 +1,10 @@
 <template>
   <TheHeader></TheHeader>
-<router-view></router-view>
+<router-view v-slot="slotProps" >
+  <Transition name="route" mode="out-in">
+    <component :is="slotProps.Component"></component>
+  </Transition>
+</router-view>
 </template>
 <script>
 import TheHeader from "./components/layout/TheHeader.vue";
@@ -26,5 +30,23 @@ body {
 .flex{
   display: flex;
   gap:16px;
+}
+.route-enter-from{
+  opacity: 0;
+  transform: translateY(-30px);
+}
+.route-leave-to{
+  opacity: 0;
+  transform: translateY(30px);
+}
+.route-enter-to, .route-leave-from{
+  opacity: 1;
+  transform: translateY(0);
+}
+.route-enter-active{
+  transition: all 0.3s ease-in;
+}
+.route-leave-active{
+  transition: all 0.3s ease-out;
 }
 </style>

@@ -26,7 +26,7 @@ export default {
     let responseData =await response.json();
     if(!response.ok)
     {
-        const error = new Error(responseData.message || "Can ngia");
+        const error = new Error(responseData.message || "Unauthorilization");
         throw error;
 
     }

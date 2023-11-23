@@ -46,6 +46,15 @@ a {
   margin-right: 0.5rem;
   display: inline-block;
 }
+button.fat,a.fat{
+  background-color: white;
+  border: 1px solid #3a0061;
+  color: black;
+
+}
+button.fat:hover,a.fat:hover{
+color: white;
+}
 
 a:hover,
 a:active,
