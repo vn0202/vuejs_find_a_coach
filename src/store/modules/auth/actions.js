@@ -11,17 +11,17 @@ export default {
         });
         const responseData = await response.json();
         if (!response.ok) {
-            const error = new Error(responseData.message || "Can authneticate");
+            const error = new Error(responseData.error.message || "Cannot authneticate");
             throw error;
         }
-        // const payload = {
-        //     idToken: responseData.idToken,
-        //     email: responseData.email,
-        //     userId: responseData.userId,
-        //     expiresIn: responseData.expiresIn,
-        //     refreshToken: responseData.refreshToken,
-        // };
-        // context.commit('setUser', payload)
+        const payloadData= {
+            idToken: responseData.idToken,
+            email: responseData.email,
+            userId: responseData.userId,
+            expiresIn: responseData.expiresIn,
+            refreshToken: responseData.refreshToken,
+        };
+        context.commit('setUser', payloadData)
     },
     async signup(context, payload) {
         const response = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBqQzy-Zyfu3AAt_IIQHtYQZidXOzECquY', {
@@ -32,10 +32,10 @@ export default {
                 returnSecureToken: true,
             })
         });
-        const responseData = response.json();
+        const responseData =await response.json();
+        console.log(responseData.message);
         if (!response.ok) {
-            console.log(responseData);
-            const error = new Error(responseData.message || "can create user");
+            const error = new Error(responseData.error.message);
             throw error;
         }
         const payloadData = {

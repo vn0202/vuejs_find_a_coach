@@ -30,7 +30,7 @@
           <p v-if="!password.isValid">Password is invalid</p>
         </div>
         <div class="form-group">
-          <base-button @click="actionAuth()"> {{ mode }} </base-button>
+          <base-button > {{ mode }} </base-button>
           <base-button type="button" mode="fat" @click="switchMode()">{{ switchModeTo }}</base-button>
         </div>
       </form>
@@ -95,7 +95,8 @@ export default {
        await this.$store.dispatch('login',data);
       }
       } catch (error) {
-        this.errorMassage = error.message || "something wrong!";
+        console.log(error)
+        this.errorMassage = error;
 
       }finally{
   this.isFetching = false;
@@ -155,6 +156,11 @@ export default {
 
     submitForm() {
       this.validateData();
+      if(this.isValidData)
+      {
+        this.actionAuth();
+
+      }
     },
     switchMode()
     {

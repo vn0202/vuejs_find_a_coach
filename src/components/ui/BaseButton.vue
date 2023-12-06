@@ -1,6 +1,6 @@
 <template>
     <div>
-        <button v-if="!link" :class="mode">
+        <button v-if="!link" :class="mode" :type="type">
           <slot></slot>
         </button>
         <router-link v-else :to="to" :class="mode">
@@ -26,6 +26,10 @@ export default{
             type: String,
             required: false,
             default: null,
+        },
+        type: {
+          type:String,
+          required:false
         }
 
     }
