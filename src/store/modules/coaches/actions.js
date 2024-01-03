@@ -8,7 +8,8 @@ export default {
             hourlyRate: payload.rate,
             areas: payload.areas,
         }
-      const response = await  fetch(`https://vue-http-demo-ff5a4-default-rtdb.firebaseio.com/coaches/${userId}.json`, {
+        const token = context.rootGetters.token;
+      const response = await  fetch(`https://vue-http-demo-ff5a4-default-rtdb.firebaseio.com/coaches/${userId}.json?auth=` + token, {
             method:"PUT",
             body: JSON.stringify(coachData),
         });
@@ -31,7 +32,6 @@ export default {
         const responseData = await response.json();
         if(!response.ok)
         {
-            //handle error
             const error = new Error(responseData.message || "Can not fetching data");
             throw error;
 

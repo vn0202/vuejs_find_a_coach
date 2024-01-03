@@ -10,8 +10,8 @@ import CoachFormRegister from "@/components/coaches/CoachFormRegister.vue";
 export default {
   components: { CoachFormRegister },
   methods:{
-    saveData(data){
-        this.$store.dispatch('coaches/registerCoach',data);
+    async saveData(data){
+       await this.$store.dispatch('coaches/registerCoach',data);
         this.$router.replace('/coaches');
     }
   }

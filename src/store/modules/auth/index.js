@@ -9,7 +9,7 @@ export default {
             refreshToken: null,
             email: null,
             expiresIn: null,
-            idToken: null,
+            token: null,
         }
     },
        mutations:mutations,

@@ -11,9 +11,9 @@
     <base-card>
       <div class="controls">
         <base-button mode="outline" @click="refresh">Refresh</base-button>
-        <base-button v-if="!isCoach && !isFetching" link to="/registers"
+        <base-button v-if=" !isCoach && !isFetching && isLogin" link to="/registers"
           >Register as a Coach</base-button
-        >
+       >
       </div>
 
       <section>
@@ -58,6 +58,7 @@ export default {
       error:null,
     };
   },
+  
   created() {
     this.loadCoaches();
   },
@@ -90,6 +91,7 @@ export default {
     },
   },
   computed: {
+    
     isCoach() {
       return this.$store.getters["coaches/isCoach"];
     },
@@ -111,6 +113,11 @@ export default {
     hasCoaches() {
       return !this.isFetching && this.$store.getters["coaches/hasCoaches"];
     },
+    isLogin()
+    {
+      return this.$store.getters.isAthenticate;
+    }
+
   },
 };
 </script>
