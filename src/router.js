@@ -1,11 +1,16 @@
+import { defineAsyncComponent } from "vue";
 import { createRouter, createWebHistory } from "vue-router";
-import CoachDetail from "./pages/coaches/CoachDetail.vue";
 import CoachContact from "./pages/coaches/CoachContact.vue";
 import CoachList from "./pages/coaches/CoachList.vue";
 import RequestList from "./pages/requests/RequestList.vue";
-import RequestRestation from "./pages/requests/RequestRestation.vue";
-import NotFound from "./pages/NotFound.vue";
-import UserAuth from "./pages/auth/UserAuth.vue";
+import store from "./store";
+
+const CoachDetail = defineAsyncComponent(() => import('./pages/coaches/CoachDetail.vue'));
+const NotFound = defineAsyncComponent(() => import("./pages/NotFound.vue"));
+const UserAuth = defineAsyncComponent(() => import('./pages/auth/UserAuth.vue'));
+const RequestRestation = defineAsyncComponent(() => import("./pages/requests/RequestRestation.vue"));
+
+
 const router = createRouter(
     {
         history: createWebHistory(),
@@ -23,7 +28,7 @@ const router = createRouter(
                 ]
             },
             {
-                path: "/requests", component: RequestList,
+                path: "/requests", component: RequestList, meta:{needAuth:true}
             },
             {
                 path:'/auth', component: UserAuth
@@ -36,4 +41,13 @@ const router = createRouter(
         ]
     }
 );
+router.beforeEach((to, _, next) => {
+    if(to.meta.needAuth && !store.getters.isAuthenticate)
+    {
+        next('/auth');
+    }
+    else{
+        next();
+    }
+});
 export default router;

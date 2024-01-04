@@ -36,8 +36,7 @@ export default {
             expiresIn: responseData.expiresIn,
             refreshToken: responseData.refreshToken,
         };
-        // let expiresIn = +responseData.expiresIn * 1000;
-        let expiresIn = 5000;
+        let expiresIn = +responseData.expiresIn * 1000;
 
         let expireDate = expiresIn +  new Date().getTime() ;
         localStorage.setItem('token', responseData.idToken);
@@ -80,8 +79,7 @@ export default {
         let restTimeExpire = +expireDate - new Date().getTime()   ;
         if(restTimeExpire > 0)
         {
-            return;
-        }
+        
         timer = setTimeout(()=>{context.dispatch('logout')}, restTimeExpire);
         if(token && userId)
         {
@@ -91,5 +89,6 @@ export default {
                 expiresIn: null,
             })
         }
+    }
     }
 };
